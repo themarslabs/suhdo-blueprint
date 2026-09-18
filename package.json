@@ -1,0 +1,25 @@
+{
+  "name": "suhdo-blueprint-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @suhdo/showcase",
+    "build": "npm run build --workspace suhdo && npm run build --workspace @suhdo/showcase",
+    "test": "npm run test --workspace suhdo",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install chromium",
+    "typecheck": "npm run typecheck --workspace @suhdo/ui",
+    "check": "npm run typecheck && npm run test && npm run build",
+    "pack:cli": "npm pack --workspace suhdo"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}

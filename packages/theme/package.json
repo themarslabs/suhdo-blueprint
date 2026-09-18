@@ -1,0 +1,29 @@
+{
+  "name": "@suhdo/theme",
+  "version": "0.1.0",
+  "description": "Canonical Suhdo UI tokens and application chrome for Tailwind CSS 4.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.css"
+  },
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "suhdo",
+    "design-system",
+    "tailwindcss",
+    "theme"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=4.0.0"
+  }
+}

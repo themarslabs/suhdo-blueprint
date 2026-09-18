@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "suhdo",
+  "homepage": "https://suhdo.com",
+  "items": [
+    {
+      "name": "suhdo-ui",
+      "type": "registry:block",
+      "title": "Suhdo UI foundation",
+      "description": "Tokens, accessible primitives and application patterns used by Suhdo products.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "lucide-react",
+        "radix-ui",
+        "recharts",
+        "tailwind-merge"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "suhdo",
+  "version": "0.1.0",
+  "description": "Install the Suhdo UI foundation and AI context into a React application.",
+  "bin": {
+    "suhdo": "dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/sync-blueprint.mjs && tsc",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepack": "npm run build"
+  },
+  "files": [
+    "blueprint",
+    "dist",
+    "README.md",
+    "THIRD_PARTY_NOTICES"
+  ],
+  "keywords": [
+    "suhdo",
+    "design-system",
+    "scaffold",
+    "react",
+    "tailwindcss"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/themarslabs/suhdo-blueprint.git"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.0.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3"
+  }
+}

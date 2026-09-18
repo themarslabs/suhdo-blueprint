@@ -1,0 +1,14 @@
+Suhdo UI Blueprint includes or adapts interfaces built on permissively licensed
+open-source projects. Their own licenses and copyright notices continue to
+apply:
+
+- shadcn/ui, MIT License: https://github.com/shadcn-ui/ui
+- Radix UI, MIT License: https://github.com/radix-ui/primitives
+- Tailwind CSS, MIT License: https://github.com/tailwindlabs/tailwindcss
+- Recharts, MIT License: https://github.com/recharts/recharts
+- Lucide, ISC License: https://github.com/lucide-icons/lucide
+- Model Context Protocol TypeScript SDK, MIT License: https://github.com/modelcontextprotocol/typescript-sdk
+
+The local showcase also uses Jost and Geist Mono under the SIL Open Font
+License 1.1 through Fontsource packages. Font files are not shipped in the
+`suhdo` CLI tarball.

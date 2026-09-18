@@ -1,0 +1,25 @@
+import "@fontsource-variable/jost"
+import "@fontsource-variable/geist-mono"
+import "./globals.css"
+
+import type { Metadata } from "next"
+import { ThemeProvider } from "@suhdo/ui/components/theme-provider"
+import { ThemeScript } from "@suhdo/ui/components/theme-script"
+
+export const metadata: Metadata = {
+  title: "Suhdo UI Blueprint",
+  description: "Referencia visual dos produtos Suhdo",
+}
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  )
+}
