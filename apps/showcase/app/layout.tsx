@@ -3,6 +3,7 @@ import "@fontsource-variable/geist-mono"
 import "./globals.css"
 
 import type { Metadata } from "next"
+import { ShowcaseShell } from "../components/showcase-shell"
 import { ThemeProvider } from "@suhdo/ui/components/theme-provider"
 import { ThemeScript } from "@suhdo/ui/components/theme-script"
 
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ThemeScript />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider><ShowcaseShell>{children}</ShowcaseShell></ThemeProvider>
       </body>
     </html>
   )

@@ -1,26 +1,22 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import {
   Activity,
-  Bell,
   Boxes,
   Check,
   CircleAlert,
   Clock3,
   Code2,
   Component,
-  Database,
   FileText,
   Gauge,
   ImagePlus,
   Info,
-  LayoutDashboard,
   Mail,
   MoreHorizontal,
   Palette,
-  Pencil,
-  Plus,
   Save,
   Settings2,
   ShieldCheck,
@@ -30,16 +26,10 @@ import {
 
 import { DataList, type DataListColumn } from "@suhdo/ui/components/app/data-list"
 import { CategoryBarChart, ChartPanel, DonutBreakdownChart, TimeSeriesChart } from "@suhdo/ui/components/app/analytics-chart"
-import { AppEmptyState, AppPage, AppPageIntro, AppPageStats, AppSectionHeader, AppStatCard } from "@suhdo/ui/components/app/app-page"
-import { AppShell, type AppNavGroup } from "@suhdo/ui/components/app/app-shell"
-import { LanguageSwitcher } from "@suhdo/ui/components/app/language-switcher"
+import { AppEmptyState, AppPage, AppPageHeader, AppPageIntro, AppPageStats, AppSectionHeader, AppStatCard } from "@suhdo/ui/components/app/app-page"
 import { DeltaBadge, DonutChart, MetricCard, MiniBars, ProgressBar, Sparkline } from "@suhdo/ui/components/app/metric-card"
-import { OrganizationSwitcher } from "@suhdo/ui/components/app/organization-switcher"
-import { UserMenu } from "@suhdo/ui/components/app/user-menu"
-import { WorkspaceSwitcher } from "@suhdo/ui/components/app/workspace-switcher"
 import { FilePickerDialog } from "@suhdo/ui/components/files/file-picker-dialog"
 import type { FileAsset } from "@suhdo/ui/components/files/file-tile"
-import { ThemeToggle } from "@suhdo/ui/components/theme-toggle"
 import { Alert, AlertDescription, AlertTitle } from "@suhdo/ui/components/ui/alert"
 import { Avatar, AvatarBadge, AvatarFallback, AvatarGroup } from "@suhdo/ui/components/ui/avatar"
 import { Badge } from "@suhdo/ui/components/ui/badge"
@@ -47,7 +37,7 @@ import { Button, type ButtonProps } from "@suhdo/ui/components/ui/button"
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@suhdo/ui/components/ui/card"
 import { Checkbox } from "@suhdo/ui/components/ui/checkbox"
 import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@suhdo/ui/components/ui/dialog"
-import { DialogsProvider, useConfirm } from "@suhdo/ui/components/ui/dialogs-provider"
+import { useConfirm } from "@suhdo/ui/components/ui/dialogs-provider"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@suhdo/ui/components/ui/dropdown-menu"
 import { Input } from "@suhdo/ui/components/ui/input"
 import { Label } from "@suhdo/ui/components/ui/label"
@@ -62,25 +52,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@suhdo/ui/components/ui/tabs"
 import { Textarea } from "@suhdo/ui/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@suhdo/ui/components/ui/tooltip"
-
-const navigation: AppNavGroup[] = [
-  {
-    label: "Blueprint",
-    items: [
-      { label: "Visao geral", href: "#overview", icon: <LayoutDashboard />, active: true },
-      { label: "Fundamentos", href: "#foundations", icon: <Palette /> },
-      { label: "Componentes", href: "#components", icon: <Component />, badge: <Badge variant="secondary">38</Badge> },
-      { label: "Dados", href: "#data", icon: <Database /> },
-    ],
-  },
-  {
-    label: "Recursos",
-    items: [
-      { label: "Contrato de UI", href: "#contract", icon: <FileText /> },
-      { label: "Tokens", href: "#tokens", icon: <Code2 /> },
-    ],
-  },
-]
 
 const tokens = [
   ["Primary", "var(--primary)"],
@@ -129,18 +100,6 @@ const workspaceColumns: DataListColumn<Workspace>[] = [
   { id: "members", header: "Membros", role: "meta", hideBelow: "md", cell: (row) => <span className="tabular-nums">{row.members}</span> },
   { id: "updated", header: "Atualizado", role: "meta", hideBelow: "lg", cell: (row) => <span className="text-muted-foreground">{row.updated}</span> },
   { id: "actions", role: "actions", className: "w-12 text-right", cell: () => <Button variant="ghost" size="icon-sm" aria-label="Acoes do workspace"><MoreHorizontal /></Button> },
-]
-
-const organizations = [
-  { id: "suhdo-labs", name: "Suhdo Labs", description: "Produto e tecnologia" },
-  { id: "three-as", name: "3AS Tecnologia", description: "Identidade e plataforma" },
-  { id: "north-studio", name: "North Studio", description: "Parceiro externo" },
-]
-
-const shellWorkspaces = [
-  { id: "hydrogen", name: "Hydrogen", description: "CMS operacional" },
-  { id: "krona", name: "Krona", description: "Timesheet" },
-  { id: "quanta", name: "Quanta", description: "Video" },
 ]
 
 const trafficData = [
@@ -209,9 +168,6 @@ export function Showcase() {
   const [terms, setTerms] = React.useState(true)
   const [compact, setCompact] = React.useState(false)
   const [busy, setBusy] = React.useState(false)
-  const [organizationId, setOrganizationId] = React.useState("suhdo-labs")
-  const [workspaceId, setWorkspaceId] = React.useState("hydrogen")
-  const [locale, setLocale] = React.useState("pt-BR")
   const [mediaAssets, setMediaAssets] = React.useState(initialAssets)
   const [selectedAssets, setSelectedAssets] = React.useState<FileAsset[]>([])
 
@@ -221,25 +177,8 @@ export function Showcase() {
   }
 
   return (
-    <DialogsProvider>
-    <AppShell
-      title="UI Blueprint"
-      navigation={navigation}
-      organizationSwitcher={<OrganizationSwitcher compact organizations={organizations} activeId={organizationId} onChange={(organization) => setOrganizationId(organization.id)} />}
-      workspaceSwitcher={<WorkspaceSwitcher workspaces={shellWorkspaces} activeId={workspaceId} organizationName={organizations.find((organization) => organization.id === organizationId)?.name} onChange={(workspace) => setWorkspaceId(workspace.id)} />}
-      languageSwitcher={<LanguageSwitcher locales={[{ code: "pt-BR", label: "Portugues", shortLabel: "PT" }, { code: "en", label: "English", shortLabel: "EN" }, { code: "es", label: "Espanol", shortLabel: "ES" }]} locale={locale} onChange={setLocale} />}
-      userMenu={<UserMenu user={{ name: "Ninja Suhdo", email: "design@suhdo.com", roleLabel: "Admin" }} actions={[{ label: "Editar perfil", icon: Pencil, onSelect: () => undefined }]} onSignOut={() => undefined} />}
-      headerActions={
-        <>
-          <Tooltip>
-            <TooltipTrigger asChild><Button variant="ghost" size="icon" aria-label="Notificacoes"><Bell /></Button></TooltipTrigger>
-            <TooltipContent>Sem novas notificacoes</TooltipContent>
-          </Tooltip>
-          <ThemeToggle />
-        </>
-      }
-    >
-      <AppPage className="space-y-12 pb-20">
+    <AppPage className="space-y-12 pb-20">
+        <AppPageHeader title="UI Blueprint" actions={<Button size="sm" asChild><Link href="/pages"><FileText />Ver paginas</Link></Button>} />
         <AppPageIntro
           eyebrow="Referencia viva"
           title="Uma linguagem para todos os produtos Suhdo"
@@ -247,7 +186,7 @@ export function Showcase() {
           icon={<Boxes className="size-5" />}
           badge={<Badge variant="success">v0.1.0</Badge>}
           meta={<><span>React 19</span><span aria-hidden="true">/</span><span>Tailwind CSS 4</span><span aria-hidden="true">/</span><span>Radix UI</span></>}
-          actions={<><Button variant="outline"><Code2 />Ver contrato</Button><Button><Plus />Novo produto</Button></>}
+          actions={<Button variant="outline" asChild><a href="#contract"><Code2 />Ver contrato</a></Button>}
         />
 
         <AppPageStats>
@@ -476,8 +415,6 @@ export function Showcase() {
             <CardFooter className="border-t border-border pt-5"><code className="rounded-md bg-muted px-3 py-2 font-mono text-xs">npx @suhdo/ui-blueprint</code></CardFooter>
           </Card>
         </section>
-      </AppPage>
-    </AppShell>
-    </DialogsProvider>
+    </AppPage>
   )
 }

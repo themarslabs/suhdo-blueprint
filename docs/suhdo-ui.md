@@ -26,16 +26,21 @@ Este documento é normativo para interfaces de produto Suhdo. Antes de criar ou 
 - Importe de `components/ui` antes de criar um primitivo.
 - Use `Button` e suas variantes `default`, `secondary`, `outline`, `ghost`, `destructive` e `link`.
 - Use `LoadingState` para regiões e `LoaderTrace` para espaços compactos. `Loader2` girando é reservado a progresso dentro de botão.
-- Use `AppPage`, `AppPageIntro`, `AppPageStats` e `AppSectionHeader` para estrutura de páginas.
+- Use `AppPage`, `AppPageHeader`, `AppPageIntro`, `AppPageStats` e `AppSectionHeader` para estrutura de páginas. `AppPageHeader` registra o título e as ações da rota no header da área de trabalho.
+- Quando o título do navbar já descreve a tarefa, não repita título ou texto introdutório logo abaixo. Em listagens operacionais, comece pelas métricas quando existirem e depois mostre a coleção.
 - Use `MetricCard` e os gráficos auxiliares para métricas.
 - Use `DataList` para coleções pesquisáveis; a tabela precisa manter semântica nativa e virar cards em telas pequenas.
-- Use `AppShell` para navegação de produto. A sidebar mede `16rem`, recolhe para `3.25rem` e vira sheet no mobile.
+- Use `AppShell` para navegação de produto. A sidebar mede `16rem`, recolhe para `3.25rem` e vira sheet no mobile. Itens de navegação podem declarar `children` para submenus.
 
 ### Shell e identidade
 
-- `AppShell` aceita `organizationSwitcher`, `workspaceSwitcher`, `languageSwitcher` e `userMenu`. A organização ativa deve continuar reconhecível mesmo com a sidebar recolhida ou fechada no mobile.
+- `AppShell` aceita `organizationSwitcher`, `applicationSwitcher`, `notifications`, `languageSwitcher` e `userMenu` na sidebar. A organização e o aplicativo ativos devem continuar reconhecíveis mesmo com a sidebar recolhida ou dentro da sheet mobile.
+- O pacote não depende de roteador. Por padrão, itens usam `<a>`; aplicações com navegação client-side fornecem `renderLink` e continuam responsáveis pelo componente de link.
+- Envolva o conteúdo da rota em `AppPageHeader` quando título ou ações mudarem entre páginas. A ação primária de uma listagem ou formulário fica no header persistente, não duplicada no corpo.
+- Use `AppHeaderActionButton` para ações do navbar: `h-7`, texto de 11 px e ícones compactos. A ação deve permanecer legível sem aumentar a altura do header.
 - `OrganizationSwitcher` recebe organizações, `activeId` e `onChange`. A UI pode mostrar iniciais e a cor estável calculada por `organizationTintStyle`, mas a aplicação é responsável por trocar tenant, redirecionar ou renovar contexto.
-- `WorkspaceSwitcher` representa um escopo de produto dentro da organização ativa. Não trate workspace como sinônimo de tenant ou claim de autorização.
+- `ApplicationSwitcher` representa o aplicativo ativo e recebe opções, `activeId` e `onChange`. `WorkspaceSwitcher` continua disponível para escopos internos de um aplicativo; nenhum deles é sinônimo de tenant ou claim de autorização.
+- `NotificationMenu` recebe notificações e callbacks de leitura. Busca, polling e persistência pertencem à aplicação.
 - `UserMenu` mostra nome, e-mail, avatar e role. Role e badge são informação visual; nunca substituem autorização no servidor.
 - `LanguageSwitcher` recebe a lista de locales e delega a mudança a `onChange`. O callback pode trocar rota, catálogo ou tradução automática; o componente não depende de Next.js, `next-intl` ou um provedor específico.
 
@@ -45,8 +50,16 @@ Este documento é normativo para interfaces de produto Suhdo. Antes de criar ou 
 - No desktop, a visualização padrão é tabela semântica; em larguras abaixo de 768 px, a lista vira cards automaticamente. O toggle tabela/cards aparece somente no desktop.
 - Declare `role` nas colunas: `primary` identifica o título do card, `media` a miniatura, `meta` os pares label/valor e `actions` as ações contextuais.
 - Use `hideBelow` para reduzir densidade da tabela sem remover informação essencial do card. Use `hideInCard` somente quando o dado for redundante.
+- Em listagens com mídia e SEO, use `ListThumb`, `SeoScoreBadge` e `SeoAverageCard`; não recrie miniatura, faixas de pontuação ou média localmente.
 - Para dados locais, forneça `getSearchText`, filtros e `pageSize`. Filtros sem restrição usam `allValue` (por padrão, `"all"`). Para paginação remota, use `controlled.search`, `controlled.sort`, `controlled.footer`, `controlled.loading` e `controlled.totalLabel`.
 - Loading, vazio e paginação pertencem à região da lista; não substitua toda a página durante atualização local.
+
+### Editores de documento
+
+- Use `DocContent` para limitar a largura de leitura do formulário e `DocPanel` para metadados laterais. Em telas menores, as duas regiões formam uma única coluna.
+- `DocPanelSection` separa publicação, URL, mídia e descoberta com divisores de largura total; não aninhe vários cards dentro do painel.
+- O título editável é o primeiro campo de `DocContent`. Ações como voltar, visualizar e salvar pertencem a `AppPageHeader`.
+- `DocSlugField` e `DocSwitchRow` são controles visuais. Validação, persistência, autorização e geração automática de slug pertencem à aplicação.
 
 ### Loading
 
@@ -76,6 +89,7 @@ Este documento é normativo para interfaces de produto Suhdo. Antes de criar ou 
 ### Gráficos
 
 - `MetricCard`, `Sparkline`, `MiniBars` e `DonutChart` são resumos compactos; não substituem gráficos analíticos quando a dimensão temporal ou categórica importa.
+- No topo de listagens operacionais, organize `MetricCard` em duas colunas no mobile, três em `md` e até cinco em `xl`, com `gap-3` e `xl:gap-4`, seguindo o Hydrogen.
 - Para análise, use `ChartPanel` com `TimeSeriesChart`, `CategoryBarChart` ou `DonutBreakdownChart`.
 - Todo gráfico declara título, período/contexto, `ariaLabel`, unidade via `valueFormatter` e séries com nomes legíveis. Use `chart-1` a `chart-5` ou tokens semânticos, nunca cores fixas.
 - `ChartPanel` diferencia loading, vazio e erro. Zero é dado válido e deve continuar visível como zero.

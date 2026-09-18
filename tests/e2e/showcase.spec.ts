@@ -2,7 +2,16 @@ import { expect, test } from "./fixtures"
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/")
-  await expect(page.getByRole("heading", { level: 1, name: "Uma linguagem para todos os produtos Suhdo" })).toBeVisible()
+  await expect(page.getByRole("heading", { level: 1, name: "UI Blueprint" })).toBeVisible()
+  await expect(page.getByRole("heading", { level: 2, name: "Uma linguagem para todos os produtos Suhdo" })).toBeVisible()
+})
+
+test("renders route actions in the initial HTML", async ({ request }) => {
+  const pagesResponse = await request.get("/pages")
+  const editResponse = await request.get("/edit")
+
+  expect(await pagesResponse.text()).toContain("Nova Página")
+  expect(await editResponse.text()).toContain("Salvar")
 })
 
 test("uses the full desktop work area", async ({ page }) => {
@@ -25,19 +34,48 @@ test("uses the full desktop work area", async ({ page }) => {
   await expect(workspaces.getByRole("button", { name: "Tabela" })).toHaveAttribute("aria-pressed", "true")
 })
 
-test("switches organization, workspace and language", async ({ page }) => {
+test("switches organization, application and language", async ({ page }) => {
   await page.getByRole("button", { name: "Organizacao ativa: Suhdo Labs" }).click()
   await page.getByRole("menuitem", { name: /3AS Tecnologia/ }).click()
   await expect(page.getByRole("button", { name: "Organizacao ativa: 3AS Tecnologia" })).toBeVisible()
 
-  await page.getByRole("button", { name: "Workspace ativo: Hydrogen" }).click()
-  await expect(page.getByRole("menu")).toContainText("Workspaces de 3AS Tecnologia")
+  await page.getByRole("button", { name: "Aplicativo ativo: Hydrogen" }).click()
+  await expect(page.getByRole("menu")).toContainText("Aplicativos")
   await page.getByRole("menuitem", { name: /Krona/ }).click()
-  await expect(page.getByRole("button", { name: "Workspace ativo: Krona" })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Aplicativo ativo: Krona" })).toBeVisible()
 
   await page.getByRole("button", { name: "Idioma: Portugues" }).click()
   await page.getByRole("menuitem", { name: /English/ }).click()
   await expect(page.getByRole("button", { name: "Idioma: English" })).toBeVisible()
+})
+
+test("reviews and clears sidebar notifications", async ({ page }) => {
+  await page.getByRole("button", { name: "Notificacoes: 2 nao lidas" }).click()
+  const menu = page.getByRole("menu")
+  await expect(menu).toContainText("Pagina pronta para revisao")
+  await expect(menu).toContainText("Publicacao concluida")
+
+  await menu.getByRole("menuitem", { name: "Marcar todas como lidas" }).click()
+  await expect(page.getByRole("button", { name: "Notificacoes", exact: true })).toBeVisible()
+})
+
+test("navigates between a page list and editor with contextual header actions", async ({ page }) => {
+  await page.getByRole("link", { name: "Páginas", exact: true }).click()
+  await expect(page).toHaveURL(/\/pages$/)
+  await expect(page.getByRole("heading", { level: 1, name: "Páginas" })).toBeVisible()
+
+  const header = page.locator("header")
+  await expect(header.getByRole("link", { name: "Nova Página" })).toBeVisible()
+  await expect(page.getByRole("region", { name: "Páginas" }).getByRole("table", { name: "Páginas" })).toBeVisible()
+  await expect(page.getByText("Conteudo publicado")).toHaveCount(0)
+  await expect(page.getByRole("region", { name: "Visualizações" })).toBeVisible()
+  await expect(page.getByRole("region", { name: "Média de SEO" })).toBeVisible()
+
+  await header.getByRole("link", { name: "Nova Página" }).click()
+  await expect(page).toHaveURL(/\/edit$/)
+  await expect(page.getByRole("heading", { level: 1, name: "Editar pagina" })).toBeVisible()
+  await expect(header.getByRole("button", { name: "Salvar" })).toBeVisible()
+  await expect(page.getByRole("textbox", { name: "Titulo da pagina" })).toHaveValue("Recursos")
 })
 
 test("opens and closes the global confirmation", async ({ page }) => {
@@ -86,6 +124,20 @@ test.describe("375px mobile", () => {
     await expect(workspaces.getByRole("table", { name: "Workspaces" })).toHaveCount(0)
     await expect(workspaces.getByRole("article")).toHaveCount(5)
     await expect(workspaces.getByRole("article", { name: "Hydrogen" })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375)
+  })
+
+  test("navigates from the mobile sheet and closes it", async ({ page }) => {
+    await page.getByRole("button", { name: "Abrir navegacao" }).click()
+    await page.getByRole("link", { name: "Páginas", exact: true }).click()
+
+    await expect(page).toHaveURL(/\/pages$/)
+    await expect(page.getByRole("heading", { level: 1, name: "Páginas" })).toBeVisible()
+    await expect(page.getByRole("button", { name: "Abrir navegacao" })).toBeVisible()
+
+    const pages = page.getByRole("region", { name: "Páginas" })
+    await expect(pages.getByRole("table", { name: "Páginas" })).toHaveCount(0)
+    await expect(pages.getByRole("article")).toHaveCount(6)
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375)
   })
 })

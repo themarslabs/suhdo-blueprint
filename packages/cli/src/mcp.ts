@@ -14,8 +14,12 @@ const MODULE_GROUPS = [
     useWhen: "Building authenticated product navigation and context controls.",
     modules: [
       { path: "components/app/app-shell.tsx", exports: ["AppShell"] },
+      { path: "components/app/app-header-context.tsx", exports: ["AppHeaderProvider", "useAppHeader"] },
+      { path: "components/app/app-header-action-button.tsx", exports: ["AppHeaderActionButton"] },
       { path: "components/app/organization-switcher.tsx", exports: ["OrganizationSwitcher"] },
+      { path: "components/app/application-switcher.tsx", exports: ["ApplicationSwitcher"] },
       { path: "components/app/workspace-switcher.tsx", exports: ["WorkspaceSwitcher"] },
+      { path: "components/app/notification-menu.tsx", exports: ["NotificationMenu"] },
       { path: "components/app/language-switcher.tsx", exports: ["LanguageSwitcher"] },
       { path: "components/app/user-menu.tsx", exports: ["UserMenu"] },
     ],
@@ -24,7 +28,8 @@ const MODULE_GROUPS = [
     id: "page-structure",
     useWhen: "Composing page headings, metrics, sections and empty states.",
     modules: [
-      { path: "components/app/app-page.tsx", exports: ["AppPage", "AppPageIntro", "AppPageStats", "AppStatCard", "AppSectionHeader", "AppEmptyState"] },
+      { path: "components/app/app-page.tsx", exports: ["AppPage", "AppPageHeader", "AppPageIntro", "AppPageStats", "AppStatCard", "AppSectionHeader", "AppEmptyState"] },
+      { path: "components/app/doc-panel.tsx", exports: ["DocContent", "DocPanel", "DocPanelSection", "DocTitleInput", "DocSwitchRow", "DocSlugField"] },
     ],
   },
   {
@@ -32,6 +37,8 @@ const MODULE_GROUPS = [
     useWhen: "Displaying searchable operational collections as desktop tables and mobile cards.",
     modules: [
       { path: "components/app/data-list.tsx", exports: ["DataList", "DataListColumn", "DataListFilter", "DataListControlled"] },
+      { path: "components/app/list-thumb.tsx", exports: ["ListThumb"] },
+      { path: "components/app/seo-score.tsx", exports: ["SeoAverageCard", "SeoScoreBadge"] },
     ],
   },
   {

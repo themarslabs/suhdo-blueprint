@@ -54,6 +54,8 @@ export type DataListProps<T> = {
   searchPlaceholder?: string
   filters?: DataListFilter<T>[]
   pageSize?: number
+  rowHeight?: number
+  cardHeight?: number
   emptyState?: React.ReactNode
   defaultView?: ViewMode
   enableViewToggle?: boolean
@@ -99,6 +101,8 @@ export function DataList<T>({
   searchPlaceholder = "Buscar...",
   filters = [],
   pageSize = 8,
+  rowHeight,
+  cardHeight,
   emptyState = "Nenhum resultado encontrado.",
   defaultView = "table",
   enableViewToggle = true,
@@ -170,7 +174,8 @@ export function DataList<T>({
         </div>
       </div>
 
-      <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
+        <div className="min-h-0 flex-1 overflow-auto">
         {controlled?.loading ? (
           <div className="flex min-h-64 items-center justify-center" role="status" aria-live="polite">
             <div className="flex items-center gap-3 text-sm text-muted-foreground"><LoaderTrace className="text-primary" />Carregando lista...</div>
@@ -203,19 +208,21 @@ export function DataList<T>({
             </TableHeader>
             <TableBody>
               {rows.map((row) => (
-                <TableRow key={getRowId(row)}>
+                <TableRow key={getRowId(row)} style={rowHeight ? { height: rowHeight } : undefined}>
                   {columns.map((column) => <TableCell key={column.id} className={cn(column.hideBelow && TABLE_VISIBILITY[column.hideBelow], ALIGN[column.align ?? "left"], column.className)}>{column.cell(row)}</TableCell>)}
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         ) : (
-          <div className="grid gap-3 p-3" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, ${cardMinWidth}px), 1fr))` }}>
+          <div className="grid gap-3 p-3" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, ${cardMinWidth}px), 1fr))`, gridAutoRows: cardHeight ? `${cardHeight}px` : undefined }}>
             {rows.map((row) => renderCard ? <React.Fragment key={getRowId(row)}>{renderCard(row)}</React.Fragment> : <DataCard key={getRowId(row)} row={row} columns={columns} ariaLabel={getRowLabel?.(row)} />)}
           </div>
         )}
 
-        <div className="flex min-h-12 items-center justify-between gap-3 border-t border-border px-3 py-2 text-xs text-muted-foreground sm:px-4">
+        </div>
+
+        <div className="flex min-h-12 shrink-0 items-center justify-between gap-3 border-t border-border px-3 py-2 text-xs text-muted-foreground sm:px-4">
           <span className="tabular-nums">
             {controlled?.totalLabel ?? (filtered.length === 0 ? "0 itens" : controlled ? `${filtered.length} carregado${filtered.length === 1 ? "" : "s"}` : `${currentPage * pageSize + 1}-${Math.min((currentPage + 1) * pageSize, filtered.length)} de ${filtered.length}`)}
           </span>
@@ -254,11 +261,11 @@ function DataCard<T>({ row, columns, ariaLabel }: { row: T; columns: DataListCol
         {actions ? <div className="-mt-1 -mr-1 shrink-0">{actions.cell(row)}</div> : null}
       </div>
       {metadata.length ? (
-        <dl className="mt-auto grid gap-2 border-t border-border pt-3">
+        <dl className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-border pt-3">
           {metadata.map((column) => (
-            <div key={column.id} className="flex min-w-0 items-center justify-between gap-3">
+            <div key={column.id} className="flex min-w-0 items-center gap-1.5">
               {!column.hideHeaderInCard && column.header ? <dt className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">{column.header}</dt> : null}
-              <dd className="min-w-0 text-right text-xs">{column.cell(row)}</dd>
+              <dd className="min-w-0 text-xs">{column.cell(row)}</dd>
             </div>
           ))}
         </dl>

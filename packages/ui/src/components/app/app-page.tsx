@@ -1,11 +1,25 @@
+"use client"
+
 import * as React from "react"
 
+import { useAppHeader } from "@/components/app/app-header-context"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
 export function AppPage({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={cn("min-h-full w-full px-4 py-5 lg:px-6 lg:py-6", className)}>{children}</div>
+}
+
+export function AppPageHeader({ title, actions }: { title: React.ReactNode; actions?: React.ReactNode }) {
+  const { clearHeader, setHeader } = useAppHeader()
+
+  React.useEffect(() => {
+    setHeader({ title, actions })
+    return clearHeader
+  }, [actions, clearHeader, setHeader, title])
+
+  return null
 }
 
 export function AppPageIntro({
@@ -39,7 +53,7 @@ export function AppPageIntro({
         <div className="flex items-start gap-3">
           {icon ? <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-[10px] border border-border/70 bg-muted/35 text-primary">{icon}</div> : null}
           <div className="min-w-0 space-y-2">
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{title}</h1>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{title}</h2>
             {description ? <p className="max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">{description}</p> : null}
           </div>
         </div>

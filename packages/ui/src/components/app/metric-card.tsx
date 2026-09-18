@@ -30,8 +30,8 @@ export function MetricCard({
   chart?: React.ReactNode
 }) {
   return (
-    <section aria-label={label} className="flex min-h-29 items-stretch gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:border-foreground/20">
-      <div className="flex min-w-0 max-w-40 flex-col">
+    <section aria-label={label} className="flex items-stretch gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:border-foreground/20">
+      <div className="flex min-w-0 max-w-40 flex-1 flex-col">
         <div className="flex items-center justify-between gap-2">
           <p className="truncate text-[11px] font-medium tracking-[0.12em] text-muted-foreground uppercase">{label}</p>
           {delta}
@@ -39,7 +39,7 @@ export function MetricCard({
         <p className="mt-2 text-2xl font-semibold tracking-tight text-foreground tabular-nums">{value}</p>
         {sublabel ? <p className="mt-0.5 truncate text-xs text-muted-foreground">{sublabel}</p> : null}
       </div>
-      {chart ? <div className="flex min-w-0 flex-1 items-stretch" aria-hidden="true">{chart}</div> : null}
+      {chart ? <div className="flex min-w-0 max-w-16 flex-1 items-stretch sm:max-w-none" aria-hidden="true">{chart}</div> : null}
     </section>
   )
 }
@@ -121,15 +121,23 @@ export function MiniBars({
 
 export type DonutSegment = { key: string; label: string; value: number; color: string }
 
-export function DonutChart({ segments }: { segments: DonutSegment[] }) {
+export function DonutChart({ segments, tooltipSide = "left" }: { segments: DonutSegment[]; tooltipSide?: "left" | "right" }) {
   const total = segments.reduce((sum, segment) => sum + Math.max(segment.value, 0), 0)
   const data = total > 0 ? segments : [{ key: "empty", label: "Sem dados", value: 1, color: "var(--muted)" }]
   const config = Object.fromEntries(segments.map((segment) => [segment.key, { label: segment.label, color: segment.color }])) as ChartConfig
+  const tooltipWrapperStyle: React.CSSProperties = {
+    transform: "none",
+    top: "50%",
+    translate: "0 -50%",
+    left: tooltipSide === "right" ? "calc(100% + 8px)" : "auto",
+    right: tooltipSide === "left" ? "calc(100% + 8px)" : "auto",
+    whiteSpace: "nowrap",
+  }
 
   return (
-    <ChartContainer config={config} className="ml-auto aspect-square h-full">
-      <PieChart>
-        {total > 0 ? <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} /> : null}
+    <ChartContainer config={config} className="ml-auto aspect-square h-full max-w-full">
+      <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+        {total > 0 ? <ChartTooltip cursor={false} wrapperStyle={tooltipWrapperStyle} content={<ChartTooltipContent hideLabel />} /> : null}
         <Pie data={data} dataKey="value" nameKey="key" innerRadius="60%" outerRadius="100%" strokeWidth={2} paddingAngle={data.length > 1 ? 3 : 0} startAngle={90} endAngle={-270} isAnimationActive={false}>
           {data.map((segment) => <Cell key={segment.key} fill={segment.color} stroke="var(--card)" />)}
         </Pie>
