@@ -1,6 +1,6 @@
 {
   "name": "@suhdo/ui-blueprint",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Install the Suhdo UI foundation and AI context into a React application.",
   "bin": {
     "suhdo": "dist/index.js"
