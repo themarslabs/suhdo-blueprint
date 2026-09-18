@@ -90,7 +90,7 @@ function createCatalog(version: string) {
   return {
     name: "Suhdo UI Blueprint",
     version,
-    source: "npx suhdo",
+    source: "npx @suhdo/ui-blueprint",
     contract: CONTRACT_URI,
     principles: [
       "Treat docs/suhdo-ui.md as normative.",

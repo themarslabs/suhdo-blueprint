@@ -73,10 +73,10 @@ function help() {
 ${bold("suhdo")} - instala as bases e o contexto da UI Suhdo
 
 ${bold("Uso")}
-  npx suhdo [init] [opcoes]
-  npx suhdo context [opcoes]
-  npx suhdo doctor [opcoes]
-  npx suhdo mcp
+  npx @suhdo/ui-blueprint [init] [opcoes]
+  npx @suhdo/ui-blueprint context [opcoes]
+  npx @suhdo/ui-blueprint doctor [opcoes]
+  npx @suhdo/ui-blueprint mcp
 
 ${bold("Comandos")}
   init       Copia tema, componentes e contexto (padrao)

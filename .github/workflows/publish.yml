@@ -61,10 +61,10 @@ jobs:
 
       - name: Publish initial package with npm token
         if: inputs.authentication == 'npm-token'
-        run: npm publish --workspace suhdo
+        run: npm publish --workspace @suhdo/ui-blueprint
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish with trusted publisher
         if: inputs.authentication == 'trusted-publisher'
-        run: npm publish --workspace suhdo
+        run: npm publish --workspace @suhdo/ui-blueprint

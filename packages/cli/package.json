@@ -1,5 +1,5 @@
 {
-  "name": "suhdo",
+  "name": "@suhdo/ui-blueprint",
   "version": "0.1.0",
   "description": "Install the Suhdo UI foundation and AI context into a React application.",
   "bin": {
@@ -26,7 +26,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/themarslabs/suhdo-blueprint.git"
+    "url": "git+https://github.com/themarslabs/suhdo-blueprint.git",
+    "directory": "packages/cli"
   },
   "license": "MIT",
   "publishConfig": {

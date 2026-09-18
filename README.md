@@ -5,7 +5,7 @@ Fonte canônica das bases visuais dos aplicativos Suhdo.
 ## Uso no aplicativo
 
 ```bash
-npx suhdo
+npx @suhdo/ui-blueprint
 ```
 
 O comando detecta um projeto React com Tailwind CSS 4, copia os tokens e os componentes para o código-fonte, instala somente as dependências visuais ausentes e adiciona o contrato de UI em `docs/suhdo-ui.md`. O contexto é referenciado de forma idempotente em `AGENTS.md`, `CLAUDE.md`, `.cursorrules` ou nas instruções do Copilot já existentes.
@@ -15,17 +15,17 @@ O CLI não altera autenticação, callbacks, middleware, sessão nem variáveis 
 ### Comandos
 
 ```bash
-npx suhdo init
-npx suhdo context
-npx suhdo doctor
-npx suhdo mcp
+npx @suhdo/ui-blueprint init
+npx @suhdo/ui-blueprint context
+npx @suhdo/ui-blueprint doctor
+npx @suhdo/ui-blueprint mcp
 ```
 
 Use `--dry-run` para ver o plano, `--yes` para execução não interativa, `--no-install` para não chamar o gerenciador de pacotes e `--force` apenas para substituir arquivos customizados, preservando uma cópia `.bak`.
 
 ### MCP
 
-`npx suhdo mcp` inicia um servidor MCP local em modo stdio. Ele expõe o contrato normativo e o catálogo de componentes como recursos somente leitura, além dos prompts `implement-suhdo-ui` e `review-suhdo-ui`.
+`npx @suhdo/ui-blueprint mcp` inicia um servidor MCP local em modo stdio. Ele expõe o contrato normativo e o catálogo de componentes como recursos somente leitura, além dos prompts `implement-suhdo-ui` e `review-suhdo-ui`.
 
 Configuração genérica para hosts compatíveis:
 
@@ -34,7 +34,7 @@ Configuração genérica para hosts compatíveis:
   "mcpServers": {
     "suhdo-ui": {
       "command": "npx",
-      "args": ["-y", "suhdo", "mcp"]
+      "args": ["-y", "@suhdo/ui-blueprint", "mcp"]
     }
   }
 }
@@ -60,7 +60,7 @@ npm run test:e2e
 
 ## Publicação
 
-O workflow `Publish npm package` valida o workspace e publica o CLI com provenance. Como o npm só permite configurar um trusted publisher depois que o pacote existe, a primeira publicação usa o modo `npm-token` e o secret `NPM_TOKEN` do environment `npm` no GitHub. O token granular deve usar `All Packages`, `Read and write (publish and stage)` e `Bypass 2FA`.
+O workflow `Publish npm package` valida o workspace e publica o CLI com provenance. Como o npm só permite configurar um trusted publisher depois que o pacote existe, a primeira publicação usa o modo `npm-token` e o secret `NPM_TOKEN` do environment `npm` no GitHub. O token granular deve usar o scope `@suhdo`, `Read and write (publish and stage)` e `Bypass 2FA`.
 
 Depois da primeira publicação, configure o trusted publisher do pacote com o repositório `themarslabs/suhdo-blueprint`, o workflow `publish.yml` e o environment `npm`. Remova o secret e use o modo `trusted-publisher` nas versões seguintes.
 
@@ -68,6 +68,6 @@ Depois da primeira publicação, configure o trusted publisher do pacote com o r
 
 - `packages/theme`: tokens CSS claros/escuros e chrome de aplicativo.
 - `packages/ui`: fonte React dos componentes distribuídos pelo CLI.
-- `packages/cli`: pacote npm unscoped `suhdo` e blueprint copy-in.
+- `packages/cli`: pacote npm `@suhdo/ui-blueprint` e blueprint copy-in.
 - `apps/showcase`: referência visual executável.
 - `docs/suhdo-ui.md`: contrato normativo consumido por pessoas e agentes.

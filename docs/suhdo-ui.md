@@ -93,7 +93,7 @@ Este documento é normativo para interfaces de produto Suhdo. Antes de criar ou 
 
 ### Servidor MCP
 
-- `npx suhdo mcp` serve este contrato em `suhdo://ui/docs/suhdo-ui.md` e o catálogo instalado em `suhdo://ui/catalog.json` usando transporte stdio.
+- `npx @suhdo/ui-blueprint mcp` serve este contrato em `suhdo://ui/docs/suhdo-ui.md` e o catálogo instalado em `suhdo://ui/catalog.json` usando transporte stdio.
 - O prompt `implement-suhdo-ui` orienta implementação; `review-suhdo-ui` orienta revisão com findings primeiro.
 - O servidor não expõe tools, não lê o projeto consumidor e não executa mutações. Recursos e prompts são contexto, não permissão para alterar auth, sessão, middleware ou infraestrutura.
 

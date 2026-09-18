@@ -1,9 +1,9 @@
-# suhdo
+# @suhdo/ui-blueprint
 
 Instala as bases visuais e o contexto normativo de UI da Suhdo em projetos React com Tailwind CSS 4.
 
 ```bash
-npx suhdo
+npx @suhdo/ui-blueprint
 ```
 
 O pacote é independente de autenticação. Para integrar o 3AS, use `npx @suhdo/3as-init` separadamente.
@@ -13,7 +13,7 @@ O pacote é independente de autenticação. Para integrar o 3AS, use `npx @suhdo
 Use o mesmo pacote como servidor MCP stdio:
 
 ```bash
-npx suhdo mcp
+npx @suhdo/ui-blueprint mcp
 ```
 
 Recursos disponíveis:
@@ -26,4 +26,4 @@ Prompts disponíveis:
 - `implement-suhdo-ui`: contexto para implementação.
 - `review-suhdo-ui`: contexto para revisão orientada a riscos.
 
-O servidor é somente leitura e pode ser configurado com comando `npx` e argumentos `-y`, `suhdo`, `mcp` em qualquer host MCP compatível.
+O servidor é somente leitura e pode ser configurado com comando `npx` e argumentos `-y`, `@suhdo/ui-blueprint`, `mcp` em qualquer host MCP compatível.
