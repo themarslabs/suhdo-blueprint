@@ -6,7 +6,7 @@ Instala as bases visuais e o contexto normativo de UI da Suhdo em projetos React
 npx @suhdo/ui-blueprint
 ```
 
-O pacote é independente de autenticação. Para integrar o 3AS, use `npx @suhdo/3as-init` separadamente.
+O pacote é independente de autenticação, sessão e provedores de identidade.
 
 ## MCP
 

@@ -60,9 +60,7 @@ npm run test:e2e
 
 ## Publicação
 
-O workflow `Publish npm package` valida o workspace e publica o CLI com provenance. Como o npm só permite configurar um trusted publisher depois que o pacote existe, a primeira publicação usa o modo `npm-token` e o secret `NPM_TOKEN` do environment `npm` no GitHub. O token granular deve usar o scope `@suhdo`, `Read and write (publish and stage)` e `Bypass 2FA`.
-
-Depois da primeira publicação, configure o trusted publisher do pacote com o repositório `themarslabs/suhdo-blueprint`, o workflow `publish.yml` e o environment `npm`. Remova o secret e use o modo `trusted-publisher` nas versões seguintes.
+O workflow `Publish npm package` valida o workspace e publica o CLI com provenance por trusted publishing. O pacote autoriza o repositório `themarslabs/suhdo-blueprint`, o workflow `publish.yml` e o environment `npm`, sem armazenar token de publicação no GitHub.
 
 ## Estrutura
 
