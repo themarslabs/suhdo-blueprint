@@ -9,7 +9,8 @@ import { spawnSync } from "node:child_process"
 import { createInterface } from "node:readline/promises"
 import { stdin, stdout } from "node:process"
 
-const VERSION = "0.1.0"
+const PACKAGE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..")
+const VERSION = JSON.parse(readFileSync(join(PACKAGE_ROOT, "package.json"), "utf8")).version as string
 const CONFIG_FILE = "suhdo.config.json"
 const CONTEXT_MARKER = "<!-- suhdo-ui-context -->"
 const CSS_MARKER = "/* suhdo-ui */"
@@ -342,8 +343,7 @@ async function run(options: Options) {
     throw new Error("O init requer React, TypeScript e Tailwind CSS 4. Use `suhdo context` para instalar somente o contrato.")
   }
 
-  const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..")
-  const blueprintRoot = join(packageRoot, "blueprint")
+  const blueprintRoot = join(PACKAGE_ROOT, "blueprint")
   const config = readConfig(project.root)
   const templatePaths = await walk(blueprintRoot)
   const selectedPaths = templatePaths.filter((path) => options.command === "init" || path === "docs/suhdo-ui.md")

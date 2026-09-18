@@ -34,6 +34,14 @@ function run(root, ...args) {
   })
 }
 
+test("reports the package version", async () => {
+  const packageJson = JSON.parse(await readFile(resolve(here, "../package.json"), "utf8"))
+  const result = spawnSync(process.execPath, [cli, "--version"], { encoding: "utf8" })
+
+  assert.equal(result.status, 0, result.stderr)
+  assert.equal(result.stdout.trim(), packageJson.version)
+})
+
 test("installs the UI blueprint idempotently", async () => {
   const root = await fixture()
   try {
