@@ -1,7 +1,8 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
-import { ArrowRightLeft, BarChart3, ExternalLink, MoreHorizontal, Pencil, Plus, SlidersHorizontal, Trash2 } from "lucide-react"
+import { ArrowRightLeft, BarChart3, ChevronLeft, ChevronRight, ExternalLink, MoreHorizontal, Pencil, Plus, SlidersHorizontal, Trash2 } from "lucide-react"
 
 import { AppHeaderActionButton } from "@suhdo/ui/components/app/app-header-action-button"
 import { AppPageHeader } from "@suhdo/ui/components/app/app-page"
@@ -62,16 +63,8 @@ const publishedRate = Math.round((publishedCount / pages.length) * 100)
 
 export function PagesShowcase() {
   return (
-    <div className="flex min-h-[calc(100svh-4rem)] flex-col gap-6 px-4 py-5 md:h-[calc(100svh-4rem)] lg:px-6 lg:py-6">
+    <div className="flex min-h-[calc(100svh-57px)] flex-col gap-6 px-4 py-5 md:h-[calc(100svh-57px)] lg:px-6 lg:py-6">
       <AppPageHeader title="Páginas" actions={<AppHeaderActionButton asChild><Link href="/edit"><Plus />Nova Página</Link></AppHeaderActionButton>} />
-
-      <div className="grid shrink-0 grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5 xl:gap-4">
-        <MetricCard label="Visualizações" value="18,4 mil" delta={<DeltaBadge value={12.4} />} sublabel="Últimos 30 dias" chart={<Sparkline data={[8, 11, 10, 14, 13, 17, 16, 21, 19, 24, 23, 27, 29, 34]} accent="emerald" label="Visualizações" />} />
-        <MetricCard label="Sessões" value="6,8 mil" delta={<DeltaBadge value={8.1} />} sublabel="Visitas · 30 dias" chart={<MiniBars data={[4, 7, 5, 9, 8, 11, 9, 13, 12, 15, 14, 17]} accent="violet" label="Sessões" />} />
-        <MetricCard label="Cliques no CTA" value="842" delta={<DeltaBadge value={-3.2} />} sublabel="Conversão 4,6%" chart={<Sparkline data={[9, 8, 11, 10, 12, 9, 8, 10, 7, 9, 8, 7]} accent="amber" label="Cliques no CTA" />} />
-        <SeoAverageCard scores={pages.map((page) => page.seoScore)} unit="página" unitPlural="páginas" />
-        <MetricCard label="Publicadas" value={`${publishedCount}/${pages.length}`} sublabel={`${publishedRate}% no ar · ${draftCount} rascunhos`} chart={<DonutChart segments={[{ key: "published", label: "Publicadas", value: publishedCount, color: "var(--chart-1)" }, { key: "draft", label: "Rascunhos", value: draftCount, color: "var(--chart-3)" }]} />} />
-      </div>
 
       <DataList
         className="min-h-0 flex-1"
@@ -86,12 +79,87 @@ export function PagesShowcase() {
         rowHeight={68}
         cardHeight={168}
         cardMinWidth={340}
+        charts={<MetricsCarousel>
+          <MetricCard label="Visualizações" value="18,4 mil" delta={<DeltaBadge value={12.4} />} sublabel="Últimos 30 dias" chart={<Sparkline data={[8, 11, 10, 14, 13, 17, 16, 21, 19, 24, 23, 27, 29, 34]} accent="emerald" label="Visualizações" />} />
+          <MetricCard label="Sessões" value="6,8 mil" delta={<DeltaBadge value={8.1} />} sublabel="Visitas · 30 dias" chart={<MiniBars data={[4, 7, 5, 9, 8, 11, 9, 13, 12, 15, 14, 17]} accent="violet" label="Sessões" />} />
+          <MetricCard label="Cliques no CTA" value="842" delta={<DeltaBadge value={-3.2} />} sublabel="Conversão 4,6%" chart={<Sparkline data={[9, 8, 11, 10, 12, 9, 8, 10, 7, 9, 8, 7]} accent="amber" label="Cliques no CTA" />} />
+          <SeoAverageCard scores={pages.map((page) => page.seoScore)} unit="página" unitPlural="páginas" />
+          <MetricCard label="Publicadas" value={`${publishedCount}/${pages.length}`} sublabel={`${publishedRate}% no ar · ${draftCount} rascunhos`} chart={<DonutChart segments={[{ key: "published", label: "Publicadas", value: publishedCount, color: "var(--chart-1)" }, { key: "draft", label: "Rascunhos", value: draftCount, color: "var(--chart-3)" }]} />} />
+        </MetricsCarousel>}
+        dateFilter={{ label: "Atualização", getDate: (page) => page.updatedAt }}
         filters={[
           { id: "status", label: "Status", options: [{ label: "Status: todos", value: "all" }, { label: "Publicadas", value: "published" }, { label: "Rascunhos", value: "draft" }], predicate: (page, value) => value === "published" ? page.published : !page.published },
           { id: "type", label: "Tipo", options: [{ label: "Tipo: todos", value: "all" }, { label: "Builder", value: "BUILDER" }, { label: "Redirect", value: "REDIRECT" }], predicate: (page, value) => page.type === value },
         ]}
         emptyState="Nenhuma página corresponde aos filtros."
       />
+    </div>
+  )
+}
+
+function MetricsCarousel({ children }: { children: React.ReactNode }) {
+  const viewportRef = React.useRef<HTMLDivElement>(null)
+  const drag = React.useRef({ active: false, startX: 0, scrollLeft: 0 })
+  const [visibleCards, setVisibleCards] = React.useState(3)
+  const [carouselGap, setCarouselGap] = React.useState(12)
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false)
+  const [canScrollRight, setCanScrollRight] = React.useState(false)
+
+  const updateScrollState = React.useCallback(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return
+    const cardWidth = viewport.firstElementChild?.getBoundingClientRect().width ?? viewport.clientWidth
+    const gap = Number.parseFloat(getComputedStyle(viewport).columnGap) || 0
+    const currentIndex = Math.round(viewport.scrollLeft / Math.max(1, cardWidth + gap))
+    const cardCount = viewport.children.length
+    setCanScrollLeft(currentIndex > 0)
+    setCanScrollRight(currentIndex + visibleCards < cardCount)
+  }, [visibleCards])
+
+  React.useEffect(() => {
+    const update = () => {
+      const width = window.innerWidth
+      setVisibleCards(width >= 1536 ? 5 : width >= 1440 ? 4 : width >= 1024 ? 3 : width >= 640 ? 2 : 1)
+      setCarouselGap(width >= 1280 ? 16 : 12)
+    }
+    update()
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [])
+
+  React.useEffect(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return
+    const frame = requestAnimationFrame(updateScrollState)
+    const observer = new ResizeObserver(updateScrollState)
+    observer.observe(viewport)
+    return () => { cancelAnimationFrame(frame); observer.disconnect() }
+  }, [visibleCards, carouselGap, updateScrollState])
+
+  function move(direction: -1 | 1) {
+    const viewport = viewportRef.current
+    if (!viewport) return
+    const card = viewport.firstElementChild?.getBoundingClientRect().width ?? viewport.clientWidth
+    const gap = Number.parseFloat(getComputedStyle(viewport).columnGap) || 0
+    viewport.scrollBy({ left: direction * (card + gap), behavior: "smooth" })
+  }
+
+  return (
+    <div className="group/carousel relative">
+      <div
+        ref={viewportRef}
+        className={cn("grid snap-x snap-mandatory grid-flow-col gap-3 overflow-x-auto overscroll-x-contain touch-pan-y [scrollbar-width:none] xl:gap-4 [&>*]:snap-start [&::-webkit-scrollbar]:hidden", (canScrollLeft || canScrollRight) && "cursor-grab active:cursor-grabbing")}
+        style={{ gridAutoColumns: `calc((100% - ${(visibleCards - 1) * carouselGap}px) / ${visibleCards})` }}
+        onScroll={updateScrollState}
+        onPointerDown={(event) => { const viewport = viewportRef.current; if (!viewport || (!canScrollLeft && !canScrollRight)) return; drag.current = { active: true, startX: event.clientX, scrollLeft: viewport.scrollLeft }; viewport.setPointerCapture(event.pointerId) }}
+        onPointerMove={(event) => { const viewport = viewportRef.current; if (!viewport || !drag.current.active) return; viewport.scrollLeft = drag.current.scrollLeft - (event.clientX - drag.current.startX) }}
+        onPointerUp={(event) => { drag.current.active = false; viewportRef.current?.releasePointerCapture(event.pointerId) }}
+        onPointerCancel={() => { drag.current.active = false }}
+      >
+        {children}
+      </div>
+      {canScrollLeft ? <Button variant="outline" size="icon-sm" className="absolute top-1/2 -left-3 z-10 size-7 -translate-y-1/2 rounded-full border-border/80 bg-background/90 opacity-0 shadow-md backdrop-blur-md transition-[opacity,transform] hover:scale-105 focus-visible:opacity-100 group-hover/carousel:opacity-100" onClick={() => move(-1)} aria-label="Gráficos anteriores"><ChevronLeft className="!size-3.5" /></Button> : null}
+      {canScrollRight ? <Button variant="outline" size="icon-sm" className="absolute top-1/2 -right-3 z-10 size-7 -translate-y-1/2 rounded-full border-border/80 bg-background/90 opacity-0 shadow-md backdrop-blur-md transition-[opacity,transform] hover:scale-105 focus-visible:opacity-100 group-hover/carousel:opacity-100" onClick={() => move(1)} aria-label="Próximos gráficos"><ChevronRight className="!size-3.5" /></Button> : null}
     </div>
   )
 }

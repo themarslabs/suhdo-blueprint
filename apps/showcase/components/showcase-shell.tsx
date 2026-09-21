@@ -3,16 +3,13 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowLeft, BookOpen, Database, FilePenLine, FileText, LayoutDashboard, Palette, Pencil, Plus, Save, Settings2 } from "lucide-react"
+import { ArrowLeft, Blocks, BookOpen, Clock3, Database, FilePenLine, FileText, LayoutDashboard, Palette, Pencil, Play, Plus, Save, Settings2 } from "lucide-react"
 
-import { ApplicationSwitcher } from "@suhdo/ui/components/app/application-switcher"
+import { AccountMenu } from "@suhdo/ui/components/app/account-menu"
 import { AppHeaderActionButton } from "@suhdo/ui/components/app/app-header-action-button"
 import { AppShell, type AppNavGroup, type AppShellLinkProps } from "@suhdo/ui/components/app/app-shell"
-import { LanguageSwitcher } from "@suhdo/ui/components/app/language-switcher"
-import { NotificationMenu, type AppNotification } from "@suhdo/ui/components/app/notification-menu"
-import { OrganizationSwitcher } from "@suhdo/ui/components/app/organization-switcher"
-import { UserMenu } from "@suhdo/ui/components/app/user-menu"
-import { ThemeToggle } from "@suhdo/ui/components/theme-toggle"
+import type { AppNotification } from "@suhdo/ui/components/app/notification-menu"
+import { ProductSwitcher } from "@suhdo/ui/components/app/product-switcher"
 import { Button } from "@suhdo/ui/components/ui/button"
 import { DialogsProvider } from "@suhdo/ui/components/ui/dialogs-provider"
 
@@ -23,9 +20,15 @@ const organizations = [
 ]
 
 const applications = [
-  { id: "hydrogen", name: "Hydrogen", description: "CMS operacional", shortLabel: "HY" },
-  { id: "krona", name: "Krona", description: "Timesheet", shortLabel: "KR" },
-  { id: "quanta", name: "Quanta", description: "Video", shortLabel: "QU" },
+  { id: "hydrogen", name: "Hydrogen", description: "CMS operacional", shortLabel: "HY", icon: Blocks },
+  { id: "krona", name: "Krona", description: "Timesheet", shortLabel: "KR", icon: Clock3 },
+  { id: "quanta", name: "Quanta", description: "Video", shortLabel: "QU", icon: Play },
+]
+
+const initialWorkspaces = [
+  { id: "principal", name: "Workspace principal", description: "Produção e conteúdo institucional" },
+  { id: "marketing", name: "Marketing", description: "Campanhas e landing pages" },
+  { id: "docs", name: "Documentação", description: "Guias e central de ajuda" },
 ]
 
 const initialNotifications: AppNotification[] = [
@@ -41,7 +44,9 @@ function renderLink(props: AppShellLinkProps) {
 export function ShowcaseShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [organizationId, setOrganizationId] = React.useState("suhdo-labs")
-  const [applicationId, setApplicationId] = React.useState("hydrogen")
+  const [applicationId] = React.useState("hydrogen")
+  const [workspaces, setWorkspaces] = React.useState(initialWorkspaces)
+  const [workspaceId, setWorkspaceId] = React.useState("principal")
   const [locale, setLocale] = React.useState("pt-BR")
   const [notifications, setNotifications] = React.useState(initialNotifications)
 
@@ -99,12 +104,32 @@ export function ShowcaseShell({ children }: { children: React.ReactNode }) {
         headerActions={routeHeader.actions}
         navigation={navigation}
         renderLink={renderLink}
-        organizationSwitcher={<OrganizationSwitcher organizations={organizations} activeId={organizationId} onChange={(organization) => setOrganizationId(organization.id)} className="w-full max-w-none" />}
-        applicationSwitcher={<ApplicationSwitcher applications={applications} activeId={applicationId} onChange={(application) => setApplicationId(application.id)} />}
-        notifications={<NotificationMenu notifications={notifications} onRead={markRead} onMarkAllRead={() => setNotifications((current) => current.map((notification) => ({ ...notification, read: true })))} />}
-        sidebarActions={<ThemeToggle />}
-        languageSwitcher={<LanguageSwitcher locales={[{ code: "pt-BR", label: "Portugues", shortLabel: "PT" }, { code: "en", label: "English", shortLabel: "EN" }, { code: "es", label: "Espanol", shortLabel: "ES" }]} locale={locale} onChange={setLocale} />}
-        userMenu={<UserMenu user={{ name: "Ninja Suhdo", email: "design@suhdo.com", roleLabel: "Admin" }} actions={[{ label: "Editar perfil", icon: Pencil, onSelect: () => undefined }]} onSignOut={() => undefined} />}
+        brand={<ProductSwitcher
+          applications={applications}
+          activeApplicationId={applicationId}
+          organizations={organizations}
+          activeOrganizationId={organizationId}
+          onOrganizationChange={(organization) => setOrganizationId(organization.id)}
+          workspaces={workspaces}
+          activeWorkspaceId={workspaceId}
+          onWorkspaceChange={(workspace) => setWorkspaceId(workspace.id)}
+          onWorkspaceCreate={() => {
+            const next = { id: `workspace-${workspaces.length + 1}`, name: `Novo workspace ${workspaces.length + 1}`, description: "Workspace recém-criado" }
+            setWorkspaces((current) => [...current, next])
+            setWorkspaceId(next.id)
+          }}
+        />}
+        userMenu={<AccountMenu
+          user={{ name: "Ninja Suhdo", email: "design@suhdo.com", roleLabel: "Admin" }}
+          notifications={notifications}
+          onRead={markRead}
+          onMarkAllRead={() => setNotifications((current) => current.map((notification) => ({ ...notification, read: true })))}
+          locales={[{ code: "pt-BR", label: "Portugues", shortLabel: "PT" }, { code: "en", label: "English", shortLabel: "EN" }, { code: "es", label: "Espanol", shortLabel: "ES" }]}
+          locale={locale}
+          onLocaleChange={setLocale}
+          actions={[{ label: "Editar perfil", icon: Pencil, onSelect: () => undefined }]}
+          onSignOut={() => undefined}
+        />}
       >
         {children}
       </AppShell>

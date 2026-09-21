@@ -35,28 +35,33 @@ test("uses the full desktop work area", async ({ page }) => {
 })
 
 test("switches organization, application and language", async ({ page }) => {
-  await page.getByRole("button", { name: "Organizacao ativa: Suhdo Labs" }).click()
+  await page.getByRole("button", { name: "Aplicativo ativo: Hydrogen em Suhdo Labs" }).click()
+  await page.getByRole("menuitem", { name: /Organizacao Suhdo Labs/ }).hover()
   await page.getByRole("menuitem", { name: /3AS Tecnologia/ }).click()
-  await expect(page.getByRole("button", { name: "Organizacao ativa: 3AS Tecnologia" })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Aplicativo ativo: Hydrogen em 3AS Tecnologia" })).toBeVisible()
 
-  await page.getByRole("button", { name: "Aplicativo ativo: Hydrogen" }).click()
-  await expect(page.getByRole("menu")).toContainText("Aplicativos")
+  await page.getByRole("button", { name: "Aplicativo ativo: Hydrogen em 3AS Tecnologia" }).click()
   await page.getByRole("menuitem", { name: /Krona/ }).click()
-  await expect(page.getByRole("button", { name: "Aplicativo ativo: Krona" })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Aplicativo ativo: Krona em 3AS Tecnologia" })).toBeVisible()
 
-  await page.getByRole("button", { name: "Idioma: Portugues" }).click()
+  await page.getByRole("button", { name: "Menu de Ninja Suhdo" }).click()
+  await page.getByRole("menuitem", { name: /Idioma/ }).hover()
   await page.getByRole("menuitem", { name: /English/ }).click()
-  await expect(page.getByRole("button", { name: "Idioma: English" })).toBeVisible()
+  await page.getByRole("button", { name: "Menu de Ninja Suhdo" }).click()
+  await page.getByRole("menuitem", { name: /Idioma EN/ }).hover()
+  await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible()
 })
 
-test("reviews and clears sidebar notifications", async ({ page }) => {
-  await page.getByRole("button", { name: "Notificacoes: 2 nao lidas" }).click()
-  const menu = page.getByRole("menu")
-  await expect(menu).toContainText("Pagina pronta para revisao")
-  await expect(menu).toContainText("Publicacao concluida")
+test("reviews and clears account notifications", async ({ page }) => {
+  await page.getByRole("button", { name: "Menu de Ninja Suhdo" }).click()
+  await page.getByRole("menuitem", { name: /Notificacoes/ }).hover()
+  await expect(page.getByRole("menuitem", { name: /Pagina pronta para revisao/ })).toBeVisible()
+  await expect(page.getByRole("menuitem", { name: /Publicacao concluida/ })).toBeVisible()
 
-  await menu.getByRole("menuitem", { name: "Marcar todas como lidas" }).click()
-  await expect(page.getByRole("button", { name: "Notificacoes", exact: true })).toBeVisible()
+  await page.getByRole("menuitem", { name: "Marcar todas como lidas" }).click()
+  await page.getByRole("button", { name: "Menu de Ninja Suhdo" }).click()
+  await page.getByRole("menuitem", { name: "Notificacoes", exact: true }).hover()
+  await expect(page.getByRole("menuitem", { name: "Marcar todas como lidas" })).toHaveCount(0)
 })
 
 test("navigates between a page list and editor with contextual header actions", async ({ page }) => {

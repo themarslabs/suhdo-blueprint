@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronRight, LogOut, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react"
+import { ChevronRight, LogOut, Menu, PanelLeft } from "lucide-react"
 
 import { AppHeaderProvider, useAppHeader } from "@/components/app/app-header-context"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -95,8 +95,9 @@ function NavigationItem({ item, collapsed, renderLink, onNavigate, onRequestExpa
   }, [childActive])
 
   const rowClassName = cn(
-    "flex h-9 w-full items-center gap-2 rounded-md px-2 text-sm text-sidebar-foreground/75 outline-none transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-    (item.active || childActive) && "bg-sidebar-accent font-medium text-sidebar-accent-foreground",
+    "flex h-9 w-full items-center gap-2 rounded-md px-2 text-sm text-sidebar-foreground/75 outline-none transition-colors hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+    item.active && "font-medium text-sidebar-accent-foreground [&>span:first-child]:text-sidebar-primary",
+    childActive && !item.active && "font-medium text-sidebar-accent-foreground [&>span:first-child]:text-sidebar-primary",
     nested && "h-8 pl-3 text-[13px]",
     collapsed && "justify-center",
   )
@@ -147,7 +148,7 @@ function Navigation({ groups, collapsed = false, renderLink, onNavigate, onReque
 }
 
 function SidebarSlot({ children, collapsed }: { children: React.ReactNode; collapsed: boolean }) {
-  return <div className={cn("min-w-0", collapsed && "mx-auto size-9 overflow-hidden [&>*]:min-w-9")}>{children}</div>
+  return <div className={cn("min-w-0 flex-1", collapsed && "mx-auto w-9 overflow-hidden [&>*]:w-9 [&>*]:min-w-9 [&>*]:justify-center [&>*]:px-0 [&>*>*:not(:first-child)]:hidden")}>{children}</div>
 }
 
 function SidebarBody({
@@ -174,8 +175,8 @@ function SidebarBody({
 
   return (
     <div data-slot="sidebar" className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
-      <div className={cn("flex h-14 items-center gap-2 px-3", collapsed && "justify-center px-2")}>
-        {brand ?? <><BrandMark /><span className={cn("text-sm font-semibold tracking-tight", collapsed && "sr-only")}>suhdo</span></>}
+      <div className={cn("flex h-[57px] items-center gap-2 px-2", collapsed && "justify-center px-2")}>
+        {brand ? <SidebarSlot collapsed={collapsed}>{brand}</SidebarSlot> : <><BrandMark /><span className={cn("text-sm font-semibold tracking-tight", collapsed && "sr-only")}>suhdo</span></>}
       </div>
       {organizationNode || applicationNode ? (
         <div className={cn("grid gap-1 px-2 pb-2", collapsed && "px-1")}>
@@ -224,7 +225,7 @@ function AppShellFrame(props: AppShellProps) {
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex min-h-16 shrink-0 items-center gap-2 border-b border-border bg-background/92 px-3 py-2 backdrop-blur-md sm:px-4 lg:px-6">
+          <header className="sticky top-0 z-30 flex h-[57px] shrink-0 items-center gap-3 border-b border-border bg-background/95 px-3 backdrop-blur-xl sm:px-4 lg:px-6">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild><Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir navegacao"><Menu /></Button></SheetTrigger>
               <SheetContent side="left" className="w-72 p-0" showCloseButton={false}>
@@ -232,12 +233,13 @@ function AppShellFrame(props: AppShellProps) {
                 <SidebarBody {...sidebarProps} onNavigate={() => setMobileOpen(false)} />
               </SheetContent>
             </Sheet>
-            <Button variant="ghost" size="icon" className="hidden md:inline-flex" onClick={() => setCollapsed((current) => !current)} aria-label={collapsed ? "Expandir barra lateral" : "Recolher barra lateral"}>
-              {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
+            <Button variant="ghost" size="icon-sm" className="hidden size-8 text-muted-foreground hover:bg-muted hover:text-foreground md:inline-flex" onClick={() => setCollapsed((current) => !current)} aria-label={collapsed ? "Expandir barra lateral" : "Recolher barra lateral"}>
+              <PanelLeft />
             </Button>
-            <Separator orientation="vertical" className="mx-1 h-5" />
-            <h1 className="min-w-0 flex-1 truncate text-base font-medium">{resolvedTitle}</h1>
-            {resolvedActions ? <div className="ml-auto flex max-w-[70%] items-center gap-2 overflow-x-auto">{resolvedActions}</div> : null}
+            <div className="min-w-0 flex-1">
+              <h1 className="truncate text-sm font-semibold tracking-[-0.01em] text-foreground">{resolvedTitle}</h1>
+            </div>
+            {resolvedActions ? <div className="ml-4 flex max-w-[70%] items-center gap-2 overflow-x-auto">{resolvedActions}</div> : null}
           </header>
           <main className="min-w-0 flex-1">{props.children}</main>
         </div>

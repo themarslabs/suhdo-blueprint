@@ -4,7 +4,8 @@ Este documento é normativo para interfaces de produto Suhdo. Antes de criar ou 
 
 ## Linguagem visual
 
-- O produto usa Jost em interfaces e Geist Mono apenas para dados técnicos ou tabulares.
+- O produto usa Manrope em toda a interface e Geist Mono apenas para dados técnicos, códigos ou valores tabulares. Títulos combinam pesos 625–675 e tracking negativo; corpo usa 450–500 para manter uma hierarquia rica, moderna e discreta.
+- A escala é compacta: corpo em 14px, controles em 13px, apoio em 11–12px e headlines entre 16–26px. Reserve tamanhos maiores para comunicação editorial, nunca para chrome de produto.
 - O verde `primary` comunica ação principal e seleção. Não é decoração de fundo.
 - Superfícies formam três níveis: `background`, `card` e `popover`.
 - Bordas são discretas e sem gradientes. Elevação usa `shadow-xs` ou `shadow-md` somente quando a hierarquia exige.

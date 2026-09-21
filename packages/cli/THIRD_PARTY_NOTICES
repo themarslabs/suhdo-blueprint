@@ -9,6 +9,6 @@ apply:
 - Lucide, ISC License: https://github.com/lucide-icons/lucide
 - Model Context Protocol TypeScript SDK, MIT License: https://github.com/modelcontextprotocol/typescript-sdk
 
-The local showcase also uses Jost and Geist Mono under the SIL Open Font
+The local showcase also uses Manrope and Geist Mono under the SIL Open Font
 License 1.1 through Fontsource packages. Font files are not shipped in the
 `suhdo` CLI tarball.

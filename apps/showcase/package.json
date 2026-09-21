@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@fontsource-variable/geist-mono": "^5.3.0",
-    "@fontsource-variable/jost": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
     "@suhdo/theme": "*",
     "@suhdo/ui": "*",
     "class-variance-authority": "^0.7.1",

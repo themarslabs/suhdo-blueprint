@@ -1,4 +1,4 @@
-import "@fontsource-variable/jost"
+import "@fontsource-variable/manrope"
 import "@fontsource-variable/geist-mono"
 import "./globals.css"
 

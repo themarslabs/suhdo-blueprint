@@ -42,6 +42,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Input } from "@suhdo/ui/components/ui/input"
 import { Label } from "@suhdo/ui/components/ui/label"
 import { ButtonSpinner, LoadingState, LoaderTrace } from "@suhdo/ui/components/ui/loading-state"
+import { RadioGroup, RadioGroupItem } from "@suhdo/ui/components/ui/radio-group"
 import { ScrollArea } from "@suhdo/ui/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@suhdo/ui/components/ui/select"
 import { Separator } from "@suhdo/ui/components/ui/separator"
@@ -120,11 +121,18 @@ const buildData = [
 ]
 
 const initialAssets: FileAsset[] = [
-  { id: "asset-1", name: "produto-capa.svg", kind: "image", previewUrl: preview("Hydrogen", "#0f766e", "#22c55e"), mime: "image/svg+xml", size: 82400, width: 1600, height: 900, alt: "Interface do produto Hydrogen" },
+  { id: "asset-1", name: "produto-capa.svg", kind: "image", url: "https://cdn-hydrogen.suhdo.com/projects/produto-capa.svg", previewUrl: preview("Hydrogen", "#0f766e", "#22c55e"), mime: "image/svg+xml", size: 82400, width: 1600, height: 900, alt: "Interface do produto Hydrogen", caption: "Visão principal da plataforma", createdAt: "2026-06-21T12:00:00.000Z", uploadedBy: "Marcio Brandão" },
   { id: "asset-2", name: "operacao-noturna.svg", kind: "image", previewUrl: preview("Operations", "#1e293b", "#7c3aed"), mime: "image/svg+xml", size: 126300, width: 1600, height: 900 },
   { id: "asset-3", name: "guia-de-marca.pdf", kind: "document", mime: "application/pdf", size: 2400000, uploadedBy: "Ana Martins" },
   { id: "asset-4", name: "demo-produto.mp4", kind: "video", mime: "video/mp4", size: 18600000, width: 1920, height: 1080 },
   { id: "asset-5", name: "icone-suhdo.svg", kind: "svg", previewUrl: preview("S", "#052e2b", "#14b8a6"), mime: "image/svg+xml", size: 12900, width: 512, height: 512 },
+  { id: "asset-6", name: "dashboard-analytics.svg", kind: "image", previewUrl: preview("Analytics", "#172554", "#3b82f6"), mime: "image/webp", size: 218000, width: 1440, height: 960 },
+  { id: "asset-7", name: "equipe-produto.svg", kind: "image", previewUrl: preview("Team", "#7c2d12", "#fb923c"), mime: "image/jpeg", size: 364000, width: 1200, height: 800 },
+  { id: "asset-8", name: "mobile-preview.svg", kind: "image", previewUrl: preview("Mobile", "#312e81", "#818cf8"), mime: "image/png", size: 192000, width: 720, height: 1280 },
+  { id: "asset-9", name: "campanha-verde.svg", kind: "image", previewUrl: preview("Campaign", "#14532d", "#4ade80"), mime: "image/webp", size: 276000, width: 1600, height: 1067 },
+  { id: "asset-10", name: "produto-detalhe.svg", kind: "image", previewUrl: preview("Product", "#3f3f46", "#a1a1aa"), mime: "image/jpeg", size: 148000, width: 900, height: 1200 },
+  { id: "asset-11", name: "hero-plataforma.svg", kind: "image", previewUrl: preview("Platform", "#164e63", "#22d3ee"), mime: "image/webp", size: 412000, width: 1920, height: 1080 },
+  { id: "asset-12", name: "integracoes.svg", kind: "image", previewUrl: preview("Integrations", "#581c87", "#c084fc"), mime: "image/png", size: 231000, width: 1280, height: 720 },
 ]
 
 function preview(label: string, from: string, to: string) {
@@ -166,6 +174,7 @@ function ConfirmAction() {
 export function Showcase() {
   const [notifications, setNotifications] = React.useState(true)
   const [terms, setTerms] = React.useState(true)
+  const [releaseChannel, setReleaseChannel] = React.useState("stable")
   const [compact, setCompact] = React.useState(false)
   const [busy, setBusy] = React.useState(false)
   const [mediaAssets, setMediaAssets] = React.useState(initialAssets)
@@ -209,7 +218,7 @@ export function Showcase() {
                 ))}
               </div>
             </Specimen>
-            <Specimen title="Tipografia" description="Jost para produto, Geist Mono para informacao tecnica.">
+            <Specimen title="Tipografia" description="Manrope para produto, Geist Mono para informacao tecnica.">
               <div className="space-y-5">
                 <div><span className="text-label-caps text-muted-foreground">Headline large</span><p className="text-headline-lg mt-1">Criar com clareza.</p></div>
                 <div><span className="text-label-caps text-muted-foreground">Headline medium</span><p className="text-headline-md mt-1">Decisoes que escalam.</p></div>
@@ -263,7 +272,14 @@ export function Showcase() {
 
             <Specimen title="Escolhas" description="Controles mantem seu estado reconhecivel nos temas.">
               <div className="space-y-4">
-                <label className="flex items-start gap-3 rounded-lg border border-border p-3"><Checkbox checked={terms} onCheckedChange={(value: boolean | "indeterminate") => setTerms(value === true)} /><span><span className="block text-sm font-medium">Seguir contrato da UI</span><span className="block text-xs leading-5 text-muted-foreground">Evita tokens e componentes paralelos.</span></span></label>
+                <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3"><Checkbox checked={terms} onCheckedChange={(value: boolean | "indeterminate") => setTerms(value === true)} /><span><span className="block text-sm font-medium">Seguir contrato da UI</span><span className="block text-xs leading-5 text-muted-foreground">Evita tokens e componentes paralelos.</span></span></label>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="mb-3 text-sm font-medium">Canal de atualização</p>
+                  <RadioGroup value={releaseChannel} onValueChange={setReleaseChannel}>
+                    <label className="flex cursor-pointer items-start gap-3"><RadioGroupItem value="stable" /><span><span className="block text-sm font-medium">Estável</span><span className="block text-xs text-muted-foreground">Somente versões prontas para produção.</span></span></label>
+                    <label className="flex cursor-pointer items-start gap-3"><RadioGroupItem value="preview" /><span><span className="block text-sm font-medium">Preview</span><span className="block text-xs text-muted-foreground">Receber recursos antes do lançamento.</span></span></label>
+                  </RadioGroup>
+                </div>
                 <label className="flex items-center justify-between gap-4 rounded-lg border border-border p-3"><span><span className="block text-sm font-medium">Notificacoes</span><span className="block text-xs text-muted-foreground">Avisar quando uma versao for publicada.</span></span><Switch checked={notifications} onCheckedChange={setNotifications} /></label>
                 <label className="flex items-center justify-between gap-4 rounded-lg border border-border p-3"><span><span className="block text-sm font-medium">Densidade compacta</span><span className="block text-xs text-muted-foreground">Reduz espaco em telas operacionais.</span></span><Switch checked={compact} onCheckedChange={setCompact} /></label>
               </div>
@@ -306,6 +322,7 @@ export function Showcase() {
                   selectionMode="collection"
                   initialSelectedIds={selectedAssets.map((asset) => asset.id)}
                   onConfirm={setSelectedAssets}
+                  onDelete={(asset) => setMediaAssets((current) => current.filter((item) => item.id !== asset.id))}
                   onUpload={(files) => {
                     const created = files.map((file, index): FileAsset => ({
                       id: `upload-${Date.now()}-${index}`,
