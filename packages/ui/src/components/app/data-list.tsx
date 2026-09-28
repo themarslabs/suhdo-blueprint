@@ -194,12 +194,12 @@ export function DataList<T>({
   }).length
 
   return (
-    <section aria-label={caption} className={cn("flex min-w-0 flex-col gap-3 xl:gap-4", className)}>
+    <section aria-label={caption} className={cn("flex min-w-0 flex-col gap-2 xl:gap-3", className)}>
       {charts && chartsVisible ? <div className="min-w-0 shrink-0">{charts}</div> : null}
-      <div className="shrink-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className={cn("shrink-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", charts && chartsVisible && "mt-2")}>
         <div className="flex w-full min-w-max items-center gap-3 xl:gap-4">
           {toolbarLeading}
-          <div className={cn("group relative min-w-52 sm:min-w-64", searchWidth === "compact" ? "w-full max-w-xs shrink-0" : "flex-1")}>
+          <div className={cn("group relative min-w-52 sm:min-w-64", searchWidth === "compact" ? "w-full max-w-xs shrink-0" : "w-full max-w-[500px] shrink-0")}>
             <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
             <Input value={query} onChange={(event) => changeQuery(event.target.value)} aria-label={searchPlaceholder} placeholder={searchPlaceholder} className="border-border/80 bg-background/70 pl-8 shadow-none min-[1900px]:h-10 min-[1900px]:text-sm" />
           </div>
@@ -333,7 +333,7 @@ function DataCard<T>({ row, columns, ariaLabel }: { row: T; columns: DataListCol
   const metadata = columns.filter((column) => (column.role ?? "meta") === "meta" && !column.hideInCard && !column.hideOnMobile)
 
   return (
-    <article aria-label={ariaLabel} className="group flex min-h-40 flex-col gap-3 overflow-hidden rounded-xl border border-border/80 bg-card/70 p-4 shadow-[0_1px_0_rgba(255,255,255,0.025)] transition-[border-color,background-color,transform] hover:-translate-y-0.5 hover:border-foreground/25 hover:bg-card">
+    <article aria-label={ariaLabel} className="group flex min-h-40 flex-col gap-3 overflow-hidden rounded-xl border border-border/80 bg-card/70 p-4 shadow-[0_1px_0_rgba(255,255,255,0.025)] transition-[border-color,background-color] hover:border-foreground/25 hover:bg-card">
       <div className="flex items-start gap-3">
         {media ? <div className="shrink-0">{media.cell(row)}</div> : null}
         {primary ? <div className="min-w-0 flex-1">{primary.cell(row)}</div> : null}

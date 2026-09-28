@@ -8,8 +8,8 @@ import { ThemeProvider } from "@suhdo/ui/components/theme-provider"
 import { ThemeScript } from "@suhdo/ui/components/theme-script"
 
 export const metadata: Metadata = {
-  title: "Suhdo UI Blueprint",
-  description: "Referencia visual dos produtos Suhdo",
+  title: "Suhdo UI Blueprint — Design system instalável",
+  description: "Componentes, tokens e padrões da Suhdo instalados diretamente no seu projeto React.",
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

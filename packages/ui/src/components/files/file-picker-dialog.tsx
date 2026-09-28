@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ArrowLeft, ArrowRight, Check, Copy, ExternalLink, FileStack, FileText, Film, ImageOff, ImagePlus, Library, Trash2, Upload } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Copy, ExternalLink, FileStack, FileText, Film, ImageOff, ImagePlus, Images, Library, Trash2, Upload } from "lucide-react"
 
 import { DataList, type DataListColumn, type DataListFilter } from "@/components/app/data-list"
 import { FileDropzone } from "@/components/files/file-dropzone"
@@ -119,9 +119,9 @@ export function FilePickerDialog({
   }]
   const tabsNavigation = (
     <TabsList className="shrink-0">
-      <TabsTrigger value="upload"><Upload className="size-3.5" />Enviar</TabsTrigger>
-      <TabsTrigger value="library"><Library className="size-3.5" />Biblioteca</TabsTrigger>
-      {multiple ? <TabsTrigger value="selection"><FileStack className="size-3.5" />{selectionMode === "collection" ? "Coleção" : "Seleção"}{selectedIds.length ? ` (${selectedIds.length})` : ""}</TabsTrigger> : null}
+      <TabsTrigger value="upload" className="w-24 flex-none"><Upload className="size-3.5" />Enviar</TabsTrigger>
+      <TabsTrigger value="library" className="w-28 flex-none"><Library className="size-3.5" />Biblioteca</TabsTrigger>
+      {multiple ? <TabsTrigger value="selection" className="w-32 flex-none tabular-nums"><Images className="size-3.5" />{selectionMode === "collection" ? "Coleção" : "Seleção"}{selectedIds.length ? ` (${selectedIds.length})` : ""}</TabsTrigger> : null}
     </TabsList>
   )
   const columns: DataListColumn<FileAsset>[] = [
@@ -218,7 +218,7 @@ export function FilePickerDialog({
                     <div className="sticky bottom-0 mt-auto flex items-center justify-between gap-3 border-t border-border bg-background/95 pt-3 backdrop-blur-md"><span className="text-sm text-muted-foreground tabular-nums">{selectedAssets.length} {selectedAssets.length === 1 ? "item" : "itens"}</span><Button onClick={() => confirmSelection()}>{confirmLabel}</Button></div>
                   </>
                 ) : (
-                  <div className="grid h-full min-h-72 place-items-center text-center"><div><FileStack className="mx-auto mb-3 size-8 text-muted-foreground/60" /><p className="text-sm font-medium">A selecao esta vazia</p><p className="mt-1 text-xs text-muted-foreground">Escolha arquivos na biblioteca.</p><Button className="mt-4" variant="outline" onClick={() => setTab("library")}>Abrir biblioteca</Button></div></div>
+                  <div className="grid h-full min-h-72 place-items-center text-center"><div><Images className="mx-auto mb-3 size-8 text-muted-foreground/60" /><p className="text-sm font-medium">A seleção está vazia</p><p className="mt-1 text-xs text-muted-foreground">Escolha arquivos na biblioteca.</p><Button className="mt-4" variant="outline" onClick={() => setTab("library")}>Abrir biblioteca</Button></div></div>
                 )}
               </TabsContent>
             ) : null}

@@ -2,8 +2,9 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { ArrowRightLeft, BarChart3, ChevronLeft, ChevronRight, ExternalLink, MoreHorizontal, Pencil, Plus, SlidersHorizontal, Trash2 } from "lucide-react"
+import { ArrowRightLeft, BarChart3, ChevronLeft, ChevronRight, ExternalLink, MoreHorizontal, Pencil, Plus, SlidersHorizontal, Sparkles, Trash2 } from "lucide-react"
 
+import { AiChatSidebar } from "@suhdo/ui/components/app/ai-chat-sidebar"
 import { AppHeaderActionButton } from "@suhdo/ui/components/app/app-header-action-button"
 import { AppPageHeader } from "@suhdo/ui/components/app/app-page"
 import { DataList, type DataListColumn } from "@suhdo/ui/components/app/data-list"
@@ -62,9 +63,11 @@ const draftCount = pages.length - publishedCount
 const publishedRate = Math.round((publishedCount / pages.length) * 100)
 
 export function PagesShowcase() {
+  const [assistantOpen, setAssistantOpen] = React.useState(false)
+
   return (
-    <div className="flex min-h-[calc(100svh-57px)] flex-col gap-6 px-4 py-5 md:h-[calc(100svh-57px)] lg:px-6 lg:py-6">
-      <AppPageHeader title="Páginas" actions={<AppHeaderActionButton asChild><Link href="/edit"><Plus />Nova Página</Link></AppHeaderActionButton>} />
+    <div className="flex min-h-[calc(100svh-58px)] flex-col gap-6 px-4 py-5 md:h-[calc(100svh-58px)] lg:px-6 lg:py-6">
+      <AppPageHeader title="Páginas" actions={<><AppHeaderActionButton variant="outline" onClick={() => setAssistantOpen(true)}><Sparkles />Assistente</AppHeaderActionButton><AppHeaderActionButton asChild><Link href="/edit"><Plus />Nova Página</Link></AppHeaderActionButton></>} />
 
       <DataList
         className="min-h-0 flex-1"
@@ -93,6 +96,8 @@ export function PagesShowcase() {
         ]}
         emptyState="Nenhuma página corresponde aos filtros."
       />
+
+      <AiChatSidebar open={assistantOpen} onOpenChange={setAssistantOpen} />
     </div>
   )
 }

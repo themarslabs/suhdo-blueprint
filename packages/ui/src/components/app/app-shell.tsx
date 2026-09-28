@@ -225,7 +225,7 @@ function AppShellFrame(props: AppShellProps) {
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex h-[57px] shrink-0 items-center gap-3 border-b border-border bg-background/95 px-3 backdrop-blur-xl sm:px-4 lg:px-6">
+          <header className="sticky top-0 z-30 flex h-[58px] shrink-0 items-center gap-3 border-b border-border bg-background/95 px-3 backdrop-blur-xl sm:px-4 lg:px-6">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild><Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir navegacao"><Menu /></Button></SheetTrigger>
               <SheetContent side="left" className="w-72 p-0" showCloseButton={false}>

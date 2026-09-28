@@ -30,6 +30,7 @@ const MODULE_GROUPS = [
     modules: [
       { path: "components/app/app-page.tsx", exports: ["AppPage", "AppPageHeader", "AppPageIntro", "AppPageStats", "AppStatCard", "AppSectionHeader", "AppEmptyState"] },
       { path: "components/app/doc-panel.tsx", exports: ["DocContent", "DocPanel", "DocPanelSection", "DocTitleInput", "DocSwitchRow", "DocSlugField"] },
+      { path: "components/app/ai-chat-sidebar.tsx", exports: ["AiChatSidebar", "AiChatSidebarProps", "AiChatModel", "AiChatSpeed", "AiChatMessage", "AiChatConversation"] },
     ],
   },
   {

@@ -50,6 +50,8 @@ export function ShowcaseShell({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = React.useState("pt-BR")
   const [notifications, setNotifications] = React.useState(initialNotifications)
 
+  if (pathname === "/") return <DialogsProvider>{children}</DialogsProvider>
+
   const routeHeader = pathname === "/pages" ? {
     title: "Páginas",
     actions: <AppHeaderActionButton asChild><Link href="/edit"><Plus />Nova Página</Link></AppHeaderActionButton>,
@@ -65,7 +67,7 @@ export function ShowcaseShell({ children }: { children: React.ReactNode }) {
     {
       label: "Aplicativo",
       items: [
-        { label: "Visao geral", href: "/", icon: <LayoutDashboard />, active: pathname === "/" },
+        { label: "Visao geral", href: "/showcase", icon: <LayoutDashboard />, active: pathname === "/showcase" },
         {
           label: "Conteudo",
           icon: <Database />,
@@ -80,13 +82,13 @@ export function ShowcaseShell({ children }: { children: React.ReactNode }) {
     {
       label: "Blueprint",
       items: [
-        { label: "Componentes", href: "/#components", icon: <Palette />, active: false },
+        { label: "Componentes", href: "/showcase#components", icon: <Palette />, active: pathname === "/showcase" },
         {
           label: "Documentacao",
           icon: <BookOpen />,
           children: [
-            { label: "Contrato de UI", href: "/#contract", icon: <FileText /> },
-            { label: "Tokens", href: "/#tokens", icon: <Settings2 /> },
+            { label: "Contrato de UI", href: "/showcase#contract", icon: <FileText /> },
+            { label: "Tokens", href: "/showcase#tokens", icon: <Settings2 /> },
           ],
         },
       ],

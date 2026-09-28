@@ -1,7 +1,7 @@
 import { expect, test } from "./fixtures"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/")
+  await page.goto("/showcase")
   await expect(page.getByRole("heading", { level: 1, name: "UI Blueprint" })).toBeVisible()
   await expect(page.getByRole("heading", { level: 2, name: "Uma linguagem para todos os produtos Suhdo" })).toBeVisible()
 })

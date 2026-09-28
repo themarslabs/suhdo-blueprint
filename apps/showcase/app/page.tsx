@@ -1,5 +1,5 @@
-import { Showcase } from "../components/showcase"
+import { LandingPage } from "../components/landing-page"
 
 export default function Page() {
-  return <Showcase />
+  return <LandingPage />
 }
